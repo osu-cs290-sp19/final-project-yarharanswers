@@ -1,0 +1,177 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+        <title>The BLog from the Sea of Cortez</title>
+    <meta charset="utf-8"/>
+    <meta name="description" content="A visual testing framework for automated UI verification"/>
+    <meta name="author" content="Josie O'Harrow"/>
+    <meta name="keywords" content="plan, project plan, planning, QAPics plan, website plan,
+    drafting, design, designing, design ideas, project research, project ideas"?>
+    <meta name="robots" content="noindex, nofollow, noarchive"/>
+    
+    <!-- links -->
+    <link href="style.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Sarabun|Staatliches" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1 class="dark-blue center-text">The <i> Blog</i> from the Sea of Cortez</h1> 
+    </header>
+
+    <nav>
+        
+    </nav>
+
+    <main>       
+        <article class="tan-bg-clear   center-text dark-blue" id="nav">
+            <a onclick="showChapter(true)" class="truly-hidden" id="left-toggle"><i class="huge-text fas fa-arrow-circle-left"></i></a>
+            <h2 class="center">Every chapter is an adventure!</h2>
+            <a onclick="showChapter(false)" id="right-toggle"><i class="huge-text fas fa-arrow-circle-right"></i></a>
+        </article>
+        <article id="#chapter0" class="chapters active">
+            <h2>Chapter None</h2>
+
+            <p>
+                Welcome to the blog from the Sea of Cortez! This page is dedicated to Steinbeck and Ed Ricket's account from their voyage on the Sea of 
+                Cortez. Use the navigation to flip through the chapters and journey with the Western Flyer and its crew.
+            </p>
+            <img class="scaled" src="western_flyer.jpg"/>
+        </article>
+        <article id="#chapter1" class="hidden">
+            <h2>Chapter One</h2>
+        </article>
+        <article id="#chapter2" class="hidden">
+            <h2>Chapter Two</h2>
+        </article>
+        <article id="#chapter3" class="hidden">
+            <h2>Chapter Three</h2>
+        </article>
+        <article id="#chapter4" class="hidden">
+            <h2>Chapter Four</h2>
+        </article>
+        <article id="#chapter5" class="hidden">
+            <h2>Chapter Five</h2>
+        </article>
+        <article id="#chapter6" class="hidden">
+            <h2>Chapter Six</h2>
+        </article>
+        <article id="#chapter7" class="hidden">
+            <h2>Chapter Seven</h2>
+        </article>
+        <article id="#chapter8" class="hidden">
+            <h2>Chapter Eight</h2>
+        </article>
+        <article id="#chapter9" class="hidden">
+            <h2>Chapter Nine</h2>
+        </article>
+        <article id="#chapter10" class="hidden">
+            <h2>Chapter Ten</h2>
+        </article>
+        <article id="#chapter11" class="hidden">
+            <h2>Chapter Eleven</h2>
+        </article>
+        <article id="#chapter12" class="hidden">
+            <h2>Chapter Twelve</h2>
+        </article>
+        <article id="#chapter13" class="hidden">
+            <h2>Chapter Thirteen</h2>
+        </article>
+        <article id="#chapter14" class="hidden">
+            <h2>Chapter Fourteen</h2>
+        </article>
+        <article id="#chapter15" class="hidden">
+            <h2>Chapter Fifteen</h2>
+        </article>
+        <article id="#chapter16" class="hidden">
+            <h2>Chapter Sixteen</h2>
+        </article>
+        <article id="#chapter17" class="hidden">
+            <h2>Chapter Seventeen</h2>
+        </article>
+        <article id="#chapter18" class="hidden">
+            <h2>Chapter Eighteen</h2>
+        </article>
+        <article id="#chapter19" class="hidden">
+            <h2>Chapter Nineteen</h2>
+        </article>
+        <article id="#chapter20" class="hidden">
+            <h2>Chapter Twenty</h2>
+        </article>
+        <article id="#chapter21" class="hidden">
+            <h2>Chapter Twenty One</h2>
+        </article>
+        <article id="#chapter22" class="hidden">
+            <h2>Chapter Twenty Two</h2>
+        </article>
+        <article id="#chapter23" class="hidden">
+            <h2>Chapter Twenty Three</h2>
+        </article>
+        <article id="#chapter24" class="hidden">
+            <h2>Chapter Twenty Four</h2>
+        </article>
+        <article id="#chapter25" class="hidden">
+            <h2>Chapter Twenty Five</h2>
+        </article>
+        <article id="#chapter26" class="hidden">
+            <h2>Chapter Twenty Six</h2>
+        </article>
+        <article id="#chapter27" class="hidden">
+            <h2>Chapter Twenty Seven</h2>
+        </article>
+        <article id="#chapter28" class="hidden">
+            <h2>Chapter Twenty Eight</h2>
+        </article>
+        <article id="#chapter29" class="hidden">
+            <h2>Chapter Twenty Nine</h2>
+        </article>
+        <article id="#chapter30" class="hidden">
+            <h2>Chapter Thirty</h2>
+        </article>
+    </main>
+
+    <footer class="center-text tan-bg dark-blue">
+        <p> &copy; Josie O'Harrow 2019</p>
+    </footer>
+    <script>
+        function showChapter(previousChapter) {
+
+            var activeElements = Array.from(document.getElementsByClassName("active"));
+            var activeChapterEl;
+
+            activeElements.forEach(function(el) {
+                if(el.id.match(/\d+/g)) {
+                    activeChapterEl = el;
+                }
+            });
+
+            var right_toggle = document.getElementById("right-toggle");
+            var left_toggle = document.getElementById("left-toggle");
+
+            var dig = activeChapterEl.id.match(/\d+/g);
+
+            if (previousChapter) {
+                var next_dig = -1 + parseInt(dig);
+            } else {
+                var next_dig = 1 + parseInt(dig);
+            }
+
+            var next_id = "#chapter" +  next_dig;
+
+            if (next_dig != 31 && next_dig != -1) {
+                left_toggle.classList = "active";
+                right_toggle.classList = "active";
+                activeChapterEl.classList = "hidden";
+                var next_el = document.getElementById(next_id);
+                next_el.classList = "chapters active";
+            }
+            if (next_dig == 30) {
+                right_toggle.classList = "truly-hidden";
+            } else if (next_dig == 0) {
+                left_toggle.classList = "truly-hidden";
+            }
+        }
+    </script>
+</body>
+</html>
