@@ -1,12 +1,14 @@
 :root {
     --tan: rgb(251, 255, 206);
-    --tan-clear: rgba(251, 255, 206, 0.5);
+    --tan-clear: rgba(251, 255, 206, 0.7);
     --dark-blue: #0f264c;
+    --gray: #a8a8a8;
+    --dark-gray: #282828;
 }
 
 html {
     height: 100%;
-    background-image: linear-gradient(lightblue, darkblue);
+    background-image: url("ocean.jpg");
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -35,10 +37,21 @@ html {
     color: var(--dark-blue);
 }
 
+.dark-gray {
+    color: var(--dark-gray);
+}
+
 article {
     padding: 5px;
-    border: 2pt solid var(--tan);
-    margin: 5px;
+    margin: 15px;
+    background-color: var(--tan-clear);
+    color: var(--dark-gray);
+}
+
+footer {
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
 }
 
 a:hover {
@@ -46,17 +59,20 @@ a:hover {
     cursor: pointer;
 }
 
-.huge-text {
-    font-size: 300%;
+.gray {
+    color: var(--gray);
 }
 
-header {
-    padding: 20px;
+.huge-text {
+    font-size: 200%;
 }
 
 h1, h2, h3, h4, h5, h6 {
     margin: 1px 5px;
-    font-family: 'Stylish', sans-serif;
+}
+
+h1 {
+    font-weight: bold;
 }
 
 #nav {
@@ -65,14 +81,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .scaled {
     max-width: 30%;
-}
-
-#chapter0 {
-}
-
-.chapters {
-    padding: 10px;
-    height: 60%;
 }
 
 .line-container {
@@ -94,9 +102,45 @@ h1, h2, h3, h4, h5, h6 {
 .hidden {
     display: none;
 }
+
+.no-margin {
+    margin: 0px;
+}
+
+.top-bottom-margin {
+    margin-top: 15px;
+    margin-bottom: 15px;    
+}
+
 .no-border {
     border: none;
 }
+
+.padded {
+    padding: 8px;
+}
+
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'PT Serif', serif;
+    padding: 0px;
+    margin: 0px;
+    font-size: 120%;
+}
+
+blockquote::before {
+    content: "\"";
+}
+
+blockquote::after {
+    content: "\"";
+}
+
+.funny-text {
+    font-family: 'Stylish', sans-serif;
+}
+
+blockquote {
+    padding: 90px;
+    padding-bottom: 131px;
+    font-size: 120%;
 }
