@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 app.use(express.static('public'));
 
 app.use(session( {
-    'secret': '343ji43j4n3jn4jk3n'
+    'secret': 'YarHar314159265843'
 }
 ))
 
