@@ -19,6 +19,8 @@ var port = process.env.PORT || 3000;
 var mongoUrl = `mongodb://${mongoUser}:${mongoPassword}@${mongoHost}:${mongoPort}/${mongoDBName}`;
 var db = null;
 
+var questionsCollection;
+
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
 
@@ -33,7 +35,14 @@ app.use(session( {
 
 app.post(/PostQuestion/, (req, res) => {
 //Basic post outline
-  var text = req.body.text;
+
+  questionsCollection.insertOne(
+    {
+      user: req.body.question.user,
+      questionText: req.body.question.questionText
+    }
+  )
+
   res.status(200).send();
 });
 
@@ -75,6 +84,8 @@ MongoClient.connect(mongoUrl, function (err, client) {
   }
   
   db = client.db(mongoDBName);
+
+  questionsCollection = db.collection('questions');
 
   app.listen(port, function (err) {  
     console.log(`-- Server listening on port ${port}`);
