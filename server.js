@@ -18,7 +18,7 @@ var port = process.env.PORT || 3000;
 
 var mongoUrl = `mongodb://${mongoUser}:${mongoPassword}@${mongoHost}:${mongoPort}/${mongoDBName}`;
 var db = null;
-
+var usersCollection;
 var questionsCollection;
 
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
@@ -35,25 +35,79 @@ app.use(session( {
 
 app.post(/PostQuestion/, (req, res) => {
 //Basic post outline
+  if(!req.body.question || !req.body.question.user || !req.body.question.questionText) {
+    //Bad request
+    res.status(400).send();
+  } else {
+    questionsCollection.insertOne(
+      {
+        user: req.body.question.user,
+        questionText: req.body.question.questionText
+      }
+    )
+    res.status(200).send();
+  }
+});
 
-  questionsCollection.insertOne(
-    {
-      user: req.body.question.user,
-      questionText: req.body.question.questionText
+app.post(/login/, (req, res) => {
+  if(!req.body.user || !req.body.user.username) {
+    //Bad request
+    res.status(400).send();
+  } else {
+    var sentUsername = req.params.userName;
+    user = usersCollection.find(
+      {
+        username: sentUsername
+      }
+    );
+    if(!user) {
+      usersCollection.insertOne(
+          {
+            username: sentUsername,
+          }
+        )
     }
-  )
+    usersCollection.updateOne(
+      //Store the session for the user.
+      { username: sentUsername },
+      { $push: { sessionID: req.sessionID }}
+    );
+    
+    res.redirect("/dashboard");
+  }
+})
 
-  res.status(200).send();
-});
+app.post(/logout/, (req, res) =>
+{
+  if(!req.body.user || !req.body.user.username) {
+    //Bad request
+    res.status(400).send();
+  } else {
+    //Clear user session and return to login page
+    usersCollection.updateOne(
+      { username: sentUsername },
+      { $push: { sessionID: ""}}
+    );
+    
+    res.redirect("/login");
+  }
+})
 
 
-app.get('/home', function (req, res, next) {
-  
-  res.status(200).send('LOGIN PAAAAGE');
-});
+app.get(/\\/, (req, res) => {
+  if(!req.sessionID) {
+    res.redirect('/login')
+  } else {
+    res.redirect('dashboard')
+  }
+})
 
 app.delete(/\d+/, (req, res) => {
   return res.send('Received a DELETE HTTP method to delete a specific question num.');
+});
+
+app.get(/\/login/, function (req, res) {
+  res.status(200).send("login page");
 });
 
 app.get(/\/dashboard/, function (req, res, next) {
@@ -61,7 +115,7 @@ app.get(/\/dashboard/, function (req, res, next) {
 
   if(!req.sessionID) {
 
-    res.redirect("/home");
+    res.redirect("/login");
   } else {
       res.status(200).send('DASHBOARD YEAH');
   }
@@ -86,6 +140,7 @@ MongoClient.connect(mongoUrl, function (err, client) {
   db = client.db(mongoDBName);
 
   questionsCollection = db.collection('questions');
+  usersCollection = db.collection('users');
 
   app.listen(port, function (err) {  
     console.log(`-- Server listening on port ${port}`);
