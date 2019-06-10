@@ -87,7 +87,7 @@ app.post("login", (req, res) => {
       {
         username: sentUsername
       }
-    );
+    ).username;
     if(!user) {
       usersCollection.insertOne(
           {
