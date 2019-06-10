@@ -1,9 +1,7 @@
 var express = require('express');
 var exphbs = require('express-handlebars');
 var bodyParser = require('body-parser');
-const uuid = require('uuid/v4')
-const session = require('express-session')
-var assert = require('assert');
+var session = require('express-session')
 var MongoClient = require('mongodb').MongoClient;
 
 const mongoHost = process.env.MONGO_HOST;
