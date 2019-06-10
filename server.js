@@ -35,13 +35,16 @@ app.use(session( {
 
 app.post(/PostQuestion/, (req, res) => {
 //Basic post outline
-  if(!req.body.question || !req.body.question.user || !req.body.question.questionText) {
+  if(!req.body.question || !req.body.question.questionText) {
     //Bad request
     res.status(400).send();
   } else {
     questionsCollection.insertOne(
       {
-        user: req.body.question.user,
+        author: usersCollection.find(
+          {
+            sessionID: req.sessionID
+          }).username,
         questionText: req.body.question.questionText
       }
     )
@@ -49,7 +52,32 @@ app.post(/PostQuestion/, (req, res) => {
   }
 });
 
-app.post(/login/, (req, res) => {
+app.post(/PostComment/, (req, res) => {
+  if(!req.body.question || !req.body.comment || !req.body.comment.text) {
+    //Bad request
+    res.status(400).send();
+  } else {
+    questionsCollection.updateOne(
+      {_id: req.body.question._id},
+      {
+        $set: 
+        { 
+          comment: 
+          {
+            author: usersCollection.find(
+              {
+                sessionID: req.sessionID
+              }).username,
+            text: req.body.question.comment.text
+          }
+        }
+      }
+    )
+    res.status(200).send();
+  }
+})
+
+app.post("login", (req, res) => {
   if(!req.body.user || !req.body.user.username) {
     //Bad request
     res.status(400).send();
@@ -94,15 +122,16 @@ app.post(/logout/, (req, res) =>
 })
 
 
-app.get(/\\/, (req, res) => {
+app.get("/", (req, res) => {
   if(!req.sessionID) {
     res.redirect('/login')
   } else {
-    res.redirect('dashboard')
+    res.redirect('/dashboard')
   }
 })
 
-app.delete(/\d+/, (req, res) => {
+app.delete(/DeleteQuestion/, (req, res) => {
+  req.params.questionNumber;
   return res.send('Received a DELETE HTTP method to delete a specific question num.');
 });
 
@@ -110,11 +139,14 @@ app.get(/\/login/, function (req, res) {
   res.status(200).send("login page");
 });
 
-app.get(/\/dashboard/, function (req, res, next) {
+app.get("/dashboard", function (req, res, next) {
   console.log(req.sessionID);
-
-  if(!req.sessionID) {
-
+  var user = usersCollection.find(
+  {
+    sessionID: req.sessionID
+  }).username;
+  if(!user) {
+    //The user is not logged in with an active sessionID
     res.redirect("/login");
   } else {
       res.status(200).send('DASHBOARD YEAH');
@@ -147,4 +179,3 @@ MongoClient.connect(mongoUrl, function (err, client) {
   });
 
 });
-
