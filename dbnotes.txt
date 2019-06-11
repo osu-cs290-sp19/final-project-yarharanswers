@@ -1,0 +1,75 @@
+classmongo.engr.oregonstate.edu
+
+Collections like tables
+
+db.getCollectionNames()
+
+Have client installed, be on network
+
+CREATE
+	Auto-create collections
+
+	Db.collection.insertOne({
+		key: “val”,
+		key: 45,
+		key: true,
+		id: “keyword”,
+		photos: []
+	})
+
+	Also have insertMany
+
+	insertedID- _id field or automatically generated
+
+READ
+	Find() 
+		db.collection.find() returns all docs in collection
+		.pretty() pretty print
+		db.collection.find({}).pretty - all docs
+		db.collection.find({ key: “val”}) all docs w/ matching 
+			query
+		AND
+			db.collection.find({ key, “val”, key: true}) return 
+				where both cases are true
+		QUERY OPERATOR
+			db.people.find({ key: { $gt: param} })
+			$gt - greater than
+			$lte - less than or equal to
+			Works with “and” operator
+			Use as any other search param but with fancy syntax
+		OR
+			db.collection.find({ $or: [key: “val”, key: true] })
+			Or takes array of “or” items
+		SORT
+			db.collection.find().sort({ key: 1})
+			“1” in increasing order
+			“-1” by decreasing age
+
+UPDATE
+
+	db.collection.updateOne( {age: 21}, { $set: { color: “purple” }});
+
+	Set color to purple where first age = 21
+
+	Vs. updateMany - any matching
+
+	UPDATE OPS
+		$set
+		$inc {key: amount} - increment
+		$push: { array_name: {} }
+
+DELETE
+	
+	db.collection.deleteOne( { key: val } );
+	db.collection.deleteMany( { key: val } );
+
+
+No schemas, but still consistency
+Q- to non-number? Or non array
+		
+
+
+
+
+
+

@@ -4,6 +4,18 @@ var bodyParser = require('body-parser');
 var session = require('express-session')
 var MongoClient = require('mongodb').MongoClient;
 
+/*
+Setup:
+
+export MONGO_HOST="classmongo.engr.oregonstate.edu"
+export MONGO_USER='cs290_ONID'
+export MONGO_PASSWORD='cs290_ONID'
+export MONGO_DB_NAME='cs290_ONID'
+
+Run:
+npm start
+*/
+
 const mongoHost = process.env.MONGO_HOST;
 const mongoPort = process.env.MONGO_PORT || 27017;
 const mongoUser = process.env.MONGO_USER;
@@ -11,9 +23,7 @@ const mongoPassword = process.env.MONGO_PASSWORD;
 const mongoDBName = process.env.MONGO_DB_NAME;
 
 var app = express();
-
 var port = process.env.PORT || 3000;
-
 var mongoUrl = `mongodb://${mongoUser}:${mongoPassword}@${mongoHost}:${mongoPort}/${mongoDBName}`;
 var db = null;
 var usersCollection;
@@ -50,7 +60,7 @@ app.post(/PostQuestion/, (req, res) => {
   }
 });
 
-app.post(/PostComment/, (req, res) => {
+app.post("PostComment", (req, res) => {
   if(!req.body.question || !req.body.comment || !req.body.comment.text) {
     //Bad request
     res.status(400).send();
@@ -61,6 +71,7 @@ app.post(/PostComment/, (req, res) => {
         $set: 
         { 
           comment: 
+          //TODO: Allow for more than one comment
           {
             author: usersCollection.find(
               {
@@ -119,7 +130,6 @@ app.post(/logout/, (req, res) =>
   }
 })
 
-
 app.get("/", (req, res) => {
   if(!req.sessionID) {
     res.redirect('/login')
@@ -175,5 +185,4 @@ MongoClient.connect(mongoUrl, function (err, client) {
   app.listen(port, function (err) {  
     console.log(`-- Server listening on port ${port}`);
   });
-
 });
