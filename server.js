@@ -16,6 +16,8 @@ Run:
 npm start
 */
 
+//TODO: Question: How are we tracking the id's to view, like, update, etc. and also to delete?
+
 const mongoHost = process.env.MONGO_HOST;
 const mongoPort = process.env.MONGO_PORT || 27017;
 const mongoUser = process.env.MONGO_USER;
@@ -39,11 +41,12 @@ app.use(express.static('public'));
 app.use(session( {
     'secret': 'YarHar314159265843'
 }
-))
+));
 
-app.post(/PostQuestion/, (req, res) => {
+
+app.post("postQuestion", (req, res) => {
 //Basic post outline
-  if(!req.body.question || !req.body.question.questionText) {
+  if(!req.body.content) {
     //Bad request
     res.status(400).send();
   } else {
@@ -52,39 +55,83 @@ app.post(/PostQuestion/, (req, res) => {
         author: usersCollection.find(
           {
             sessionID: req.sessionID
-          }).username,
-        questionText: req.body.question.questionText
+          }).author,
+        content: req.body.content,
+        date: Date.now()
       }
     )
     res.status(200).send();
   }
 });
 
-app.post("PostComment", (req, res) => {
-  if(!req.body.question || !req.body.comment || !req.body.comment.text) {
+
+app.post("postComment", (req, res) => {
+  if(!req.body._id || !req.body.content) {
     //Bad request
     res.status(400).send();
   } else {
     questionsCollection.updateOne(
-      {_id: req.body.question._id},
+      {_id: req.body._id},
       {
-        $set: 
+        $push: 
         { 
-          comment: 
-          //TODO: Allow for more than one comment
-          {
-            author: usersCollection.find(
-              {
-                sessionID: req.sessionID
-              }).username,
-            text: req.body.question.comment.text
+          comments: {
+            comment:
+            {
+              author: usersCollection.find(
+                {
+                  sessionID: req.sessionID
+                }).username,
+              text: req.body.content
+            }
           }
+          
         }
       }
     )
     res.status(200).send();
   }
 })
+
+
+app.get("viewQuestion", (req, res) => {
+  var question = {_id: req.body._id};
+  questionsCollection.updateOne(
+    question,
+    {
+      $inc: {
+        views: 1
+      }
+    }
+  )
+})
+
+
+app.get("likeQuestion", (req, res) => {
+  var question = {_id: req.body._id};
+  questionsCollection.updateOne(
+    question,
+    {
+      $inc: {
+        likes: 1
+      }
+    }
+  )
+})
+
+
+app.get("likeComment", (req, res) => {
+  var comment = {'question.comments.comment._id': req.body._id};
+  questionsCollection.updateOne(
+    comment,
+    {
+      $inc: {
+        likes: 1
+      }
+    }
+  )
+})
+
 
 app.post("login", (req, res) => {
   if(!req.body.user || !req.body.user.username) {
@@ -114,9 +161,10 @@ app.post("login", (req, res) => {
   }
 })
 
-app.post(/logout/, (req, res) =>
+
+app.post("logout", (req, res) =>
 {
-  if(!req.body.user || !req.body.user.username) {
+  if(!req.body.username) {
     //Bad request
     res.status(400).send();
   } else {
@@ -125,27 +173,47 @@ app.post(/logout/, (req, res) =>
       { username: sentUsername },
       { $push: { sessionID: ""}}
     );
-    
     res.redirect("/login");
   }
 })
 
+
 app.get("/", (req, res) => {
-  if(!req.sessionID) {
+  var user = usersCollection.find(
+    {
+      sessionID: req.sessionID
+    }).username;
+    if(!user) {
+      //The user is not logged in with an active sessionID
+      res.redirect("/login");
+    }
+  if(!user) {
     res.redirect('/login')
   } else {
     res.redirect('/dashboard')
   }
 })
 
-app.delete(/DeleteQuestion/, (req, res) => {
-  req.params.questionNumber;
-  return res.send('Received a DELETE HTTP method to delete a specific question num.');
+
+app.delete("deleteQuestion", (req, res) => {
+
+  var question = {_id: req.body._id}
+  questionsCollection.remove(question);
+  return res.send('Deleted question.');
 });
 
-app.get(/\/login/, function (req, res) {
+app.delete("deleteComment", (req, res) => {
+
+  var comment = {'question.comments.commend_id': req.body._id}
+  questionsCollection.remove(comment);
+  return res.send('Deleted comment.');
+});
+
+
+app.get("/login", function (req, res) {
   res.status(200).send("login page");
 });
+
 
 app.get("/dashboard", function (req, res, next) {
   console.log(req.sessionID);
@@ -161,10 +229,12 @@ app.get("/dashboard", function (req, res, next) {
   }
 });
 
+
 app.get('*', function (req, res, next) {
   console.log(`---- The requested url \"${req.url}\" was not found`);
   res.status(404).send('404 Not Found');
 });
+
 
 MongoClient.connect(mongoUrl, function (err, client) {
   if (err) {

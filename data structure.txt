@@ -10,3 +10,30 @@ Question [
         "Land Ho!"s:
     }
 ]
+
+-> code friendly version (with intended naming structs)
+-> Note: I think _id is auto-generated, so we shouldn't have to mess with making a unique id ourselves.
+
+question {
+    _id:
+    author:
+    content:
+    date:
+    views: 
+    likes:
+    comments {
+        comment {
+            _id:
+            author:
+            content:
+            likes:
+        }
+    }
+}
+
+users {
+    user {
+        username:
+        sessionID:
+    }
+}
