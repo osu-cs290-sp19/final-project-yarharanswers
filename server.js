@@ -134,11 +134,11 @@ app.get("likeComment", (req, res) => {
 
 
 app.post("login", (req, res) => {
-  if(!req.body.user || !req.body.user.username) {
+  if(!req.body.username) {
     //Bad request
     res.status(400).send();
   } else {
-    var sentUsername = req.params.userName;
+    var sentUsername = req.body.username;
     user = usersCollection.find(
       {
         username: sentUsername
@@ -195,6 +195,14 @@ app.get("/", (req, res) => {
 })
 
 
+app.post("searchText", (req, res) => {
+  //Will return the first 10 questions that have *question text content* matching the search string
+  var questions = {$contains:{content: req.body.searchText}};
+  var foundQuestions = questionsCollection.find(questions).limit(10);
+  //TODO: render w/ found questions
+})
+
+
 app.delete("deleteQuestion", (req, res) => {
 
   var question = {_id: req.body._id}
@@ -225,6 +233,9 @@ app.get("/dashboard", function (req, res, next) {
     //The user is not logged in with an active sessionID
     res.redirect("/login");
   } else {
+    //Sort in decreasing order of date to begin with. You got 10 here.
+      var questions = questionsCollection.find().sort({date: -1}).limit(10);
+      //TODO: Render page with questions as data.
       res.status(200).send('DASHBOARD YEAH');
   }
 });

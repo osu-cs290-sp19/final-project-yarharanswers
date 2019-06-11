@@ -1,0 +1,35 @@
+There will have to be a few forms to manage the requests. Here are what I have ran into so far:
+
+Making a new question
+    Fields:
+        - content
+
+Making a new comment
+    Fields:
+        - _id (hidden, id for the question)
+        - content
+
+View question
+    Fields:
+        - _id (of the question)
+Like question
+    Fields:
+        - _id
+Like comment
+    Fields:
+        - _id (of the *comment*)
+Login:
+    Fields:
+        - username
+Logout:
+    Fields:
+        - username
+Search question text:
+    Fields:
+        - searchText
+Delete Question:
+    Fields:
+        - _id
+Delete Comment:
+    Fields:
+        - _id
