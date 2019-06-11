@@ -1,0 +1,23 @@
+body {
+    font-family: 'Roboto Condensed', sans-serif;
+    background: #82F0F7;
+}
+
+header {
+    background-color: white;
+    margin: 0px;
+    padding: 0px;
+    border: none;
+}
+
+.title-yarhar {
+    display: inline-block;
+}
+
+.title-answers {
+    display: inline-block;
+}
+
+#header-search-bar {
+    float: right;
+}
