@@ -239,12 +239,14 @@ app.get("/dashboard", function (req, res, next) {
     if (err || result == null || result.username == null) {
       res.redirect("/login");
     } else {
-
+      var currentAuthor = result.username;
+      console.log(currentAuthor);
       var questions = db.collection('questions').find({}).toArray(function(err, result) {
         if (err) throw err;
         res.status(200).render('dashboard', {
           loggedIn: true,
-          q: result
+          q: result,
+          currentAuthor
         });
       });
     }
