@@ -201,7 +201,7 @@ app.get("/dashboard", function (req, res, next) {
         if (err) throw err;
         res.status(200).render('dashboard', {
           loggedIn: true,
-          q: result,
+          q: result.reverse(),
           currentAuthor
         });
       });
