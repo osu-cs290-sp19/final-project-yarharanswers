@@ -210,11 +210,14 @@ app.post("searchText", (req, res) => {
 })
 
 
-app.delete("deleteQuestion", (req, res) => {
+app.delete("/deleteQuestion", (req, res) => {
 
   var question = {_id: req.body._id}
-  questionsCollection.remove(question);
-  return res.send('Deleted question.');
+  questionsCollection.remove(question, function(err, result) {
+    if(!err) {
+      return res.send('Deleted question.');
+    }
+  });
 });
 
 app.delete("deleteComment", (req, res) => {

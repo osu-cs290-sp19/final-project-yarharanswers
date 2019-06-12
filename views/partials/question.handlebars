@@ -4,6 +4,7 @@
         <span class="text-muted raleway">-{{author}}</span>
         {{#if mine}}
         <form action="deleteComment" method="delete"></form>
+        `   <span name="_id" style='display: hidden'>{{_id}}</span>
             <button class="btn btn-danger float-right" action="deleteQuestion" method="delete">Delete Post</button>
         </form>
         {{/if}}
