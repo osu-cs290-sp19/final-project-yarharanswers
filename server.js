@@ -180,11 +180,6 @@ app.post("/login", (req, res) => {
 
 app.get("/logout", (req, res) =>
 {
-  //if(!req.body.username) {
-    //Bad request
-  //  res.status(400).send();
-  //} else {
-    //Clear user session and return to login page
     usersCollection.updateOne(
       { sessionID: req.sessionID },
       { $push: { sessionID: ""}},
@@ -194,20 +189,17 @@ app.get("/logout", (req, res) =>
         }
       }
     );
- //   res.redirect("/login");
- // }
 })
 
 
 app.get("/", (req, res) => {
-    res.redirect('/dashboard')
+    res.redirect('/login')
 })
 
 
 app.post("searchText", (req, res) => {
-  //Will return the first 10 questions that have *question text content* matching the search string
   var questions = {$contains:{content: req.body.searchText}};
-  var foundQuestions = questionsCollection.find(questions).limit(10);
+  var foundQuestions = questionsCollection.find(questions);
   //TODO: render w/ found questions
 })
 
@@ -242,15 +234,12 @@ app.get("/dashboard", function (req, res, next) {
       res.redirect("/login");
     } else {
 
-      var questions = db.collection('questions').find({}, function(err, result) {
-        if(!err) {
-          console.log(result.toArray());
-          res.status(200).render('dashboard', {
-            loggedIn: true,
-            q: result.sort({date: -1}).limit(10).toArray()
-          });
-          console.log(`--------------- ${result.sort({date: -1}).limit(10).toArray()}`);
-        }
+      var questions = db.collection('questions').find({}).toArray(function(err, result) {
+        if (err) throw err;
+        res.status(200).render('dashboard', {
+          loggedIn: true,
+          q: result
+        });
       });
     }
   });
