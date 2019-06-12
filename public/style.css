@@ -1,5 +1,5 @@
 body {
-    font-family: 'Roboto Condensed', sans-serif;
+    font-family: 'Raleway', sans-serif;
     background: #82F0F7;
     margin: 0px;
     padding: 0px;
@@ -16,7 +16,7 @@ body {
 
 .title-yarhar {
     display: inline-block;
-    padding: 10px;
+    padding: 1%;
     font-family: 'Rock Salt', sans-serif;
     font-size: 25px;
 }
@@ -35,8 +35,8 @@ a .title-answers {
 }
 
 #header-search-bar {
-    margin-right: 20px;
-    margin-top: 40px;
+    margin-right: 3%;
+    margin-top: 4%;
 }
 
 a:any-link {
@@ -48,8 +48,8 @@ a:any-link {
 }
 
 .nav {
-    padding: 5px;
-    margin-top: -20px;
+    padding: 1%;
+    margin-top: -2%;
     color: #10153e;
 }
 
@@ -59,7 +59,7 @@ a:any-link {
 }
 
 .new-post-link {
-    margin-top: 20px;
+    margin-top: 2%;
     float: right;
     font-size: 20px;
     color: #10153e;
@@ -76,14 +76,15 @@ a:any-link {
     font-size: 20px;
     font-weight: bold;
     float: left;
-    margin-top: 30px;
-    margin-left: 10px;
+    margin-top: 5%;
+    margin-left: 1%;
 }
 
 .title-answer {
     font-size: 30px;
     font-weight: bold;
-    margin-left: 50px;
+    margin-left: 22%;
+    margin-top: 5%;
     padding: 0px;
 }
 
