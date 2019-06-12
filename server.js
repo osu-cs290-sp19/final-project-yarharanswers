@@ -58,21 +58,19 @@ app.post("/postQuestion", (req, res) => {
     //Bad request
     res.status(400).send();
   } else {
-    questionsCollection.insertOne(
+
+    db.collection('questions').insertOne(
       {
-        author: usersCollection.find(
-          {
-            sessionID: req.sessionID
-          }).username.toArray()[0],
+        author: 'filler',//TODO: Replace
         content: req.body.content,
         title: req.body.title,
         date: Date.now()
+      }, function (err, result) {
+        if(!err) {
+          res.redirect("/dashboard")
+        }
       }
     )
-    var questions = questionsCollection.find({}).limit(10).toArray();
-    res.status(200).render('dashboard', {
-      q: questions
-    });
   }
 });
 
@@ -99,9 +97,12 @@ app.post("postComment", (req, res) => {
           }
           
         }
+      }, function(err, result) {
+        if (!err) {
+          es.status(200).send();
+        }
       }
     )
-    res.status(200).send();
   }
 })
 
@@ -248,14 +249,14 @@ app.get("/dashboard", function (req, res, next) {
       res.redirect("/login");
     } else {
 
-      var questions = questionsCollection.find({}, function(err, result) {
+      var questions = db.collection('questions').find({}, function(err, result) {
         if(!err) {
-          console.log(result);
-          questions = result.sort({date: -1}).limit(10).toArray();
+          console.log(result.toArray());
+          //questions = result;//.sort({date: -1}).limit(10).toArray();
           res.status(200).render('dashboard', {
-            q: questions
+            q: result.sort({date: -1}).limit(10).toArray()
           });
-          console.log('done');
+          console.log(`--------------- ${result.sort({date: -1}).limit(10).toArray()}`);
         }
       });
     }
