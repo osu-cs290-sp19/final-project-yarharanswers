@@ -1,0 +1,27 @@
+<div class="card mt-3">
+    <h3 class="card-header rock-salt">
+        <span class="rock-salt">{{qTitle}}</span>
+        <span class="text-muted raleway">-{{qAuthor}}</span>
+    </h5>
+    <div class="card-body">
+        <h5 class="card-title roboto">{{qContent}}</h5>
+        <a href="#" class="btn btn-sm btn-primary">Ahoy!</a>
+        <span># of Ahoys: {{qLikes}}</span>
+    </div>
+    <div class="card-footer bg-white text-muted">
+        <a href="#" class="btn btn-info">Toggle Comments</a>
+    </div>
+    <div class="card-footer bg-white text-muted">
+        <div class="input-group">
+            <textarea class="form-control" placeholder="Comment..." aria-label="Comment Submission"></textarea>
+            <div class="input-group-append">
+                <button class="btn btn-info" type="submit">Post comment</button>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        {{#each qComments}}
+            {{> comment}}
+        {{/each}}
+    </div>
+</div>
