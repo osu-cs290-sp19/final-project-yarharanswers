@@ -48,7 +48,7 @@
                     <button type="button" class="btn btn-info roboto" data-toggle="modal" data-target="#question-modal">New Question</button>
                 </div>
                 
-                <div class="modal" id="question-modal" tabindex="1" role="dialog">
+                <div class="modal fade" id="question-modal" tabindex="1" role="dialog">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -60,7 +60,9 @@
                             <div class="modal-body">
                                 <form>
                                     <div class="form-group">
-                                        <input type="question" class="question-form form-control-lg" aria-describedby="questionHelp" placeholder="Question">
+                                        <input type="text" class="form-control" id="title" placeholder="title...">
+                                        <hr \>
+                                        <textarea class="form-control" aria-describedby="questionHelp" placeholder="question..."></textarea>
                                     </div>
                                 </form>
                             </div>
@@ -75,22 +77,27 @@
                 <!--These will be dynamically added w/ handlebars-->
                 <div class="container mt-5">
                     <div class="card mt-3">
-                        <h3 class="card-header bg-white rock-salt">
-                            <span class="rock-salt">Title</span>
-                            <span class="text-muted raleway">-Author</span>
-                        </h3>
+                        <h3 class="card-header rock-salt">
+                            <span class="rock-salt">{{qTitle}}</span>
+                            <span class="text-muted raleway">-{{qAuthor}}</span>
+                        </h5>
                         <div class="card-body">
-                            <h5 class="card-title roboto">Question</h5>
-                            <a href="#" class="btn btn-sm btn-primary">Ahoy!</a>
+                            <h5 class="card-title roboto">{{qContent}}</h5>
+                            <a href="#" class="btn btn-sm btn-info">Ahoy!</a>
+                            <span># of Ahoys: {{qLikes}}</span>
                         </div>
                         <div class="card-footer bg-white text-muted">
-                            <a href="#" class="btn btn-info">Toggle Comments</a>
+                            <a data-toggle="collapse" href="#comments" aria-expanded="true" aria-controls="comments" class="btn btn-info">Toggle Comments</a>
                         </div>
                         <div class="card-footer bg-white text-muted">
-                            <input class="form-control mr-sm-2" type="text" placeholder="Add a comment">
-                            <button class="btn btn-info mt-2" type="submit">Post comment</button>
+                            <div class="input-group">
+                                <textarea class="form-control" placeholder="Comment..." aria-label="Comment Submission"></textarea>
+                                <div class="input-group-append">
+                                    <button class="btn btn-info" type="submit">Post comment</button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-footer">
+                        <div class="card-footer collapse" id="comments">
                             <div class="card mb-1">
                                 <h5 class="card-header bg-white rock-salt">
                                     <span class="text-muted raleway">Author</span>
