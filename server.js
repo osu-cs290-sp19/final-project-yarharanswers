@@ -145,7 +145,6 @@ app.post("/login", (req, res) => {
         username: sentUsername
       }
     ).username;
-    console.log(user);
     if(!user) {
       usersCollection.insertOne(
           {
