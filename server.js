@@ -210,15 +210,17 @@ app.post("searchText", (req, res) => {
 })
 
 
-app.delete("/deleteQuestion", (req, res) => {
+app.delete(/\/deleteQuestion\/.+/, (req, res) => {
 
-  var question = {_id: req.body._id}
+  var id = req.url.replace(/^[\/deleteQuestion\/]+/, '');
+  var question = {_id: id}
   questionsCollection.remove(question, function(err, result) {
     if(!err) {
-      return res.send('Deleted question.');
+      return res.status(200).send();
     }
   });
 });
+
 
 app.delete("deleteComment", (req, res) => {
 
