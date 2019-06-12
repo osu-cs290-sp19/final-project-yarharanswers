@@ -3,6 +3,7 @@ var exphbs = require('express-handlebars');
 var bodyParser = require('body-parser');
 var session = require('express-session')
 var MongoClient = require('mongodb').MongoClient;
+var ObjectId = require('mongodb').ObjectID;
 
 /*
 Setup:
@@ -68,7 +69,8 @@ app.post("/postQuestion", (req, res) => {
             author: user,//TODO: Replace
             content: req.body.content,
             title: req.body.title,
-            date: Date.now()
+            date: Date.now(),
+            comments: []
           }, function (err, result) {
             if(!err) {
               res.redirect("/dashboard")
@@ -81,12 +83,23 @@ app.post("/postQuestion", (req, res) => {
 });
 
 
-app.post("postComment", (req, res) => {
+app.post("/postComment", (req, res) => {
   if(!req.body._id || !req.body.content) {
     //Bad request
     res.status(400).send();
   } else {
-    questionsCollection.updateOne(
+    
+    var myquery = {"_id": ObjectId(req.body._id)};
+    var newvalues = { $push: { comments: { author: 'Unknown', content: req.body.content } } };
+    console.log(req.body._id);
+    db.collection('questions').updateOne(myquery, newvalues, function(err, result) {
+      if (!err) {
+         console.log("1 document updated");
+        res.redirect("/dashboard");
+      }
+    });
+  /*  questionsCollection.updateOne(
+     
       {_id: req.body._id},
       {
         $push: 
@@ -94,21 +107,17 @@ app.post("postComment", (req, res) => {
           comments: {
             comment:
             {
-              author: usersCollection.find(
-                {
-                  sessionID: req.sessionID
-                }).username,
-              text: req.body.content
+              author: 'Unknown',
+              content: req.body.content
             }
           }
-          
         }
       }, function(err, result) {
         if (!err) {
-          es.status(200).send();
+          res.redirect("/dashboard");
         }
       }
-    )
+    )*/
   }
 })
 
@@ -210,12 +219,14 @@ app.post("searchText", (req, res) => {
 })
 
 
-app.delete(/\/deleteQuestion\/.+/, (req, res) => {
+app.get("deleteQuestion/:id", (req, res) => {
 
   var id = req.url.replace(/^[\/deleteQuestion\/]+/, '');
+  console.log(id);
   var question = {_id: id}
   questionsCollection.remove(question, function(err, result) {
     if(!err) {
+   //   res.redirect('dash')
       return res.status(200).send();
     }
   });

@@ -19,7 +19,8 @@
     <div class="card-footer bg-white text-muted">
         <form action="postComment" method="post">
             <div class="input-group" >
-                <textarea class="form-control" placeholder="Comment..." aria-label="Comment Submission"></textarea>
+                <textarea class="form-control" name='content' placeholder="Comment..." aria-label="Comment Submission"></textarea>
+                <input name='_id' value={{_id}} style='display: none'></input>
                 <div class="input-group-append">
                     <button class="btn btn-info" type="submit">Post comment</button>
                 </div>
@@ -27,7 +28,7 @@
         </form>
     </div>
     <div class="card-footer">
-        {{#each qComments}}
+        {{#each comments}}
             {{> comment}}
         {{/each}}
     </div>
