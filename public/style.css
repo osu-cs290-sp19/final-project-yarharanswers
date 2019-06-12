@@ -16,6 +16,7 @@ header {
 
 .title-yarhar {
     display: inline-block;
+    padding: 10px;
 }
 
 a .title-yarhar {
@@ -28,6 +29,11 @@ a .title-yarhar {
 
 a .title-answers {
     color: #10153e;
+}
+
+#header-search-bar {
+    margin-right: 20px;
+    margin-top: 40px;
 }
 
 a:any-link {
@@ -68,8 +74,11 @@ a:any-link {
     margin-left: 10px;
 }
 
-.title {
-
+.title-answer {
+    font-size: 30px;
+    font-weight: bold;
+    margin-left: 50px;
+    padding: 0px;
 }
 
 #prev-page-button {
