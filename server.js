@@ -66,7 +66,7 @@ app.post("/postQuestion", (req, res) => {
         user = result.username;
         db.collection('questions').insertOne(
           {
-            author: user,//TODO: Replace
+            author: user,
             content: req.body.content,
             title: req.body.title,
             date: Date.now(),
@@ -104,27 +104,6 @@ app.post("/postComment", (req, res) => {
         });
       }
     });
-   
-  /*  questionsCollection.updateOne(
-     
-      {_id: req.body._id},
-      {
-        $push: 
-        { 
-          comments: {
-            comment:
-            {
-              author: 'Unknown',
-              content: req.body.content
-            }
-          }
-        }
-      }, function(err, result) {
-        if (!err) {
-          res.redirect("/dashboard");
-        }
-      }
-    )*/
   }
 })
 
@@ -176,26 +155,41 @@ app.post("/login", (req, res) => {
     res.status(400).send();
   } else {
     var sentUsername = req.body.username;
-    user = collection.find(
+    user = collection.findOne(
       {
         username: sentUsername
-      }
-    ).toArray()[0];
-    if(!user) {
-      
-      collection.insertOne(
-          {
-            username: sentUsername,
-            sessionID: req.sessionID
-          }, function (err, result) {
-            if(err) {
-            } else {
-              res.redirect('/dashboard');
-              console.log('redirected');
-            }
+      }, function (err, result) {
+        if (!err) {
+          user = result;
+          console.log(user);
+          if(!user) {
+        
+            collection.insertOne(
+                {
+                  username: sentUsername,
+                  sessionID: req.sessionID
+                }, function (err, result) {
+                  if(err) {
+                  } else {
+                    res.redirect('/dashboard');
+                  }
+                }
+              )
+          } else {
+            collection.updateOne(
+              {username: sentUsername},
+              {$set: {sessionID: req.sessionID}},
+              function (err, result) {
+                if(err) {
+                } else {
+                  res.redirect('/dashboard');
+                }
+              }
+            )
           }
-        )
-    }
+        }
+      }
+    );
   }
 })
 
