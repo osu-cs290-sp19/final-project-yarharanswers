@@ -70,6 +70,7 @@ app.post("/postQuestion", (req, res) => {
             content: req.body.content,
             title: req.body.title,
             date: Date.now(),
+            likes: 0,
             comments: []
           }, function (err, result) {
             if(!err) {
