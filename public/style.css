@@ -17,6 +17,8 @@ body {
 .title-yarhar {
     display: inline-block;
     padding: 10px;
+    font-family: 'Rock Salt', sans-serif;
+    font-size: 25px;
 }
 
 a .title-yarhar {
@@ -25,6 +27,7 @@ a .title-yarhar {
 
 .title-answers {
     display: inline-block;
+    font-family: 'Raleway', sans-serif;
 }
 
 a .title-answers {
