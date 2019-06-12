@@ -68,7 +68,7 @@ a:any-link {
 
 .answer {
     background: white;
-    width: 800px;
+    width: 60%;
     margin: 0 auto;
 }
 
@@ -84,11 +84,11 @@ a:any-link {
     font-size: 30px;
     font-weight: bold;
     margin-left: 22%;
-    margin-top: 5%;
+    margin-top: 0%;
     padding: 0px;
 }
 
-#prev-page-button {
+/*#prev-page-button {
     position: fixed;
     top: 500px;
-}
+}*/
