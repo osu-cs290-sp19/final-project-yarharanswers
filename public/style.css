@@ -1,23 +1,81 @@
 body {
     font-family: 'Roboto Condensed', sans-serif;
     background: #82F0F7;
+    margin: 0px;
+    padding: 0px;
 }
 
 header {
     background-color: white;
-    margin: 0px;
+    background: white;
+    /*margin-left: -100px;
+    margin-right: -100px;
+    overflow-x: hidden;*/
+    background-clip: content-box;
     padding: 0px;
-    border: none;
+    border: 0px;
+    width: 100%;
 }
 
 .title-yarhar {
     display: inline-block;
 }
 
+a .title-yarhar {
+    color: #10153e;
+}
+
 .title-answers {
     display: inline-block;
 }
 
+a .title-answers {
+    color: #10153e;
+}
+
+a:any-link {
+    text-decoration: none;
+}
+
 #header-search-bar {
     float: right;
+}
+
+.the-top-part {
+    padding: 0px;
+    margin-top: 0px;
+}
+
+.sort-by {
+    display: inline-block;
+    font-size: 20px;
+}
+
+.new-post-link {
+    display: inline-block;
+    float: right;
+    font-size: 20px;
+}
+
+.answer {
+    background: white;
+    width: 800px;
+    margin: 0 auto;
+}
+
+.author {
+    font-size: 20px;
+    font-weight: bold;
+    float: left;
+    margin-top: 30px;
+    margin-left: 10px;
+}
+
+.title {
+
+}
+
+#prev-page-button {
+    position: fixed;
+    top: 500px;
 }
