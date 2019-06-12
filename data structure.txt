@@ -13,6 +13,7 @@ Question [
 
 -> code friendly version (with intended naming structs)
 -> Note: I think _id is auto-generated, so we shouldn't have to mess with making a unique id ourselves.
+--> Yea I believe that JSONs handle that themselves (also haha mine's longer)
 
 question {
     _id:
