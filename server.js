@@ -58,19 +58,25 @@ app.post("/postQuestion", (req, res) => {
     //Bad request
     res.status(400).send();
   } else {
-
-    db.collection('questions').insertOne(
-      {
-        author: 'filler',//TODO: Replace
-        content: req.body.content,
-        title: req.body.title,
-        date: Date.now()
-      }, function (err, result) {
-        if(!err) {
-          res.redirect("/dashboard")
-        }
+    var user = 'Unknown User';
+    db.collection('users').findOne({sessionID: req.sessionID}, function (err, result) {
+      if(!err) {
+        console.log(result.username);
+        user = result.username;
+        db.collection('questions').insertOne(
+          {
+            author: user,//TODO: Replace
+            content: req.body.content,
+            title: req.body.title,
+            date: Date.now()
+          }, function (err, result) {
+            if(!err) {
+              res.redirect("/dashboard")
+            }
+          }
+        );
       }
-    )
+    })   
   }
 });
 
@@ -180,7 +186,7 @@ app.post("/login", (req, res) => {
 
 app.get("/logout", (req, res) =>
 {
-    usersCollection.updateOne(
+    db.collection('users').updateOne(
       { sessionID: req.sessionID },
       { $push: { sessionID: ""}},
       function(err, result) {
@@ -230,7 +236,7 @@ app.get("/dashboard", function (req, res, next) {
 
   const collection = db.collection('users');
   var user = collection.findOne({sessionID: req.sessionID}, function(err, result) {
-    if (err) {
+    if (err || result == null || result.username == null) {
       res.redirect("/login");
     } else {
 
