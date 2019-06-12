@@ -21,19 +21,19 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="title" placeholder="title...">
-                            <hr \>
-                            <textarea class="form-control" aria-describedby="questionHelp" placeholder="question..."></textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Ask</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
+                <form action="postQuestion" method="post">
+                    <div class="modal-body">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="title" placeholder="title...">
+                                <hr \>
+                                <textarea class="form-control" aria-describedby="questionHelp" placeholder="question..."></textarea>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Ask</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -44,4 +44,8 @@
             {{> question}}
         {{/each}}
     </div>
+    <footer class="fixed-bottom py-1">
+        <button type="button" class="btn btn-info float-left ml-5 roboto">Prev Page</button>
+        <button type="button" class="btn btn-info float-right mr-5 roboto">Next Page</button>
+    </footer>
 </div>
