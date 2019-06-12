@@ -1,94 +1,15 @@
-body {
-    font-family: 'Raleway', sans-serif;
-    background: #82F0F7;
-    margin: 0px;
-    padding: 0px;
+.rock-salt {
+    font-family: 'Rock Salt', sans-serif
 }
 
-.title-and-search {
-    background-color: white;
-    background: white;
-    background-clip: content-box;
-    padding: 0px;
-    border: 0px;
-    width: 100%;
+.raleway {
+    font-family: 'Raleway', sans-serif
 }
 
-.title-yarhar {
-    display: inline-block;
-    padding: 1%;
-    font-family: 'Rock Salt', sans-serif;
-    font-size: 25px;
+.roboto {
+    font-family: 'Roboto', sans-serif
 }
 
-a .title-yarhar {
-    color: #10153e;
+.blue {
+    background-color: #82F0F7
 }
-
-.title-answers {
-    display: inline-block;
-    font-family: 'Raleway', sans-serif;
-}
-
-a .title-answers {
-    color: #10153e;
-}
-
-#header-search-bar {
-    margin-right: 3%;
-    margin-top: 4%;
-}
-
-a:any-link {
-    text-decoration: none;
-}
-
-#header-search-bar {
-    float: right;
-}
-
-.nav {
-    padding: 1%;
-    margin-top: -2%;
-    color: #10153e;
-}
-
-.sort-by {
-    display: inline-block;
-    font-size: 20px;
-}
-
-.new-post-link {
-    margin-top: 2%;
-    float: right;
-    font-size: 20px;
-    color: #10153e;
-    font-weight: bold;
-}
-
-.answer {
-    background: white;
-    width: 60%;
-    margin: 0 auto;
-}
-
-.author {
-    font-size: 20px;
-    font-weight: bold;
-    float: left;
-    margin-top: 5%;
-    margin-left: 1%;
-}
-
-.title-answer {
-    font-size: 30px;
-    font-weight: bold;
-    margin-left: 22%;
-    margin-top: 0%;
-    padding: 0px;
-}
-
-/*#prev-page-button {
-    position: fixed;
-    top: 500px;
-}*/
