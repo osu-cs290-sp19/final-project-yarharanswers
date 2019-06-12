@@ -25,8 +25,8 @@ Run:
 npm start
 */
 
-//TODO: Question: How are we tracking the id's to view, like, update, etc. and also to delete?
 
+/**************************** SETUP ****************************/
 const mongoHost = process.env.MONGO_HOST;
 const mongoPort = process.env.MONGO_PORT || 27017;
 const mongoUser = process.env.MONGO_USER;
@@ -53,6 +53,7 @@ var db = null;
 var usersCollection;
 var questionsCollection;
 
+/**************************** Request Handlers ****************************/
 app.post("/postQuestion", (req, res) => {
 //Basic post outline
   if(!req.body.content) {
@@ -62,7 +63,6 @@ app.post("/postQuestion", (req, res) => {
     var user = 'Unknown User';
     db.collection('users').findOne({sessionID: req.sessionID}, function (err, result) {
       if(!err) {
-        console.log(result.username);
         user = result.username;
         db.collection('questions').insertOne(
           {
@@ -89,8 +89,6 @@ app.post("/postComment", (req, res) => {
     //Bad request
     res.status(400).send();
   } else {
-    
-
     db.collection('users').findOne({sessionID: req.sessionID}, function (err, result) {
       if(!err) {
         user = result.username;
@@ -98,7 +96,6 @@ app.post("/postComment", (req, res) => {
         var newvalues = { $push: { comments: { author: user, content: req.body.content } } };
         db.collection('questions').updateOne(myquery, newvalues, function(err, result) {
           if (!err) {
-            console.log("1 document updated");
             res.redirect("/dashboard");
           }
         });
@@ -108,46 +105,8 @@ app.post("/postComment", (req, res) => {
 })
 
 
-app.get("viewQuestion", (req, res) => {
-  var question = {_id: req.body._id};
-  questionsCollection.updateOne(
-    question,
-    {
-      $inc: {
-        views: 1
-      }
-    }
-  )
-})
-
-
-app.get("likeQuestion", (req, res) => {
-  var question = {_id: req.body._id};
-  questionsCollection.updateOne(
-    question,
-    {
-      $inc: {
-        likes: 1
-      }
-    }
-  )
-})
-
-
-app.get("likeComment", (req, res) => {
-  var comment = {'question.comments.comment._id': req.body._id};
-  questionsCollection.updateOne(
-    comment,
-    {
-      $inc: {
-        likes: 1
-      }
-    }
-  )
-})
-
-
 app.post("/login", (req, res) => {
+  //TODO: Clean this up. I know it's ugly :/
   console.log(req.sessionID);
   const collection = db.collection('users');
   if(!req.body.username) {
@@ -191,12 +150,11 @@ app.post("/login", (req, res) => {
       }
     );
   }
-})
+});
 
 
 app.get("/logout", (req, res) =>
 {
-  console.log('called')
     db.collection('users').updateOne(
       { sessionID: req.sessionID },
       { $set: { sessionID: ""}},
@@ -206,24 +164,15 @@ app.get("/logout", (req, res) =>
         }
       }
     );
-})
+});
 
 
 app.get("/", (req, res) => {
     res.redirect('/login')
-})
-
-
-app.post("searchText", (req, res) => {
-  var questions = {$contains:{content: req.body.searchText}};
-  var foundQuestions = questionsCollection.find(questions);
-  //TODO: render w/ found questions
-})
+});
 
 
 app.get("/deleteQuestion/:id", (req, res) => {
-  console.log(req.params.id);
-
   var question = {"_id": ObjectId(req.params.id)}
   questionsCollection.remove(question, function(err, result) {
     if(!err) {
@@ -231,14 +180,6 @@ app.get("/deleteQuestion/:id", (req, res) => {
       res.redirect("/dashboard");
     }
   });
-});
-
-
-app.delete("deleteComment", (req, res) => {
-
-  var comment = {'question.comments.commend_id': req.body._id}
-  questionsCollection.remove(comment);
-  return res.send('Deleted comment.');
 });
 
 
@@ -250,14 +191,12 @@ app.get("/login", function (req, res) {
 
 
 app.get("/dashboard", function (req, res, next) {
-
   const collection = db.collection('users');
   var user = collection.findOne({sessionID: req.sessionID}, function(err, result) {
     if (err || result == null || result.username == null) {
       res.redirect("/login");
     } else {
       var currentAuthor = result.username;
-      console.log(currentAuthor);
       var questions = db.collection('questions').find({}).toArray(function(err, result) {
         if (err) throw err;
         res.status(200).render('dashboard', {
@@ -277,6 +216,7 @@ app.get('*', function (req, res, next) {
 });
 
 
+/**************************** START ****************************/
 MongoClient.connect(mongoUrl, function (err, client) {
   if (err) {
     console.log(`-- Error connecting to mongo client. Did you specify environment variables correctly?`);
@@ -297,3 +237,60 @@ MongoClient.connect(mongoUrl, function (err, client) {
     console.log(`-- Server listening on port ${port}`);
   });
 });
+
+
+
+
+
+/**************************** NOT IMPLEMENTED ****************************/
+app.get("viewQuestion", (req, res) => {
+  var question = {_id: req.body._id};
+  questionsCollection.updateOne(
+    question,
+    {
+      $inc: {
+        views: 1
+      }
+    }
+  )
+})
+
+
+app.get("likeQuestion", (req, res) => {
+  var question = {_id: req.body._id};
+  questionsCollection.updateOne(
+    question,
+    {
+      $inc: {
+        likes: 1
+      }
+    }
+  )
+})
+
+
+app.get("likeComment", (req, res) => {
+  var comment = {'question.comments.comment._id': req.body._id};
+  questionsCollection.updateOne(
+    comment,
+    {
+      $inc: {
+        likes: 1
+      }
+    }
+  )
+})
+
+app.delete("deleteComment", (req, res) => {
+
+  var comment = {'question.comments.commend_id': req.body._id}
+  questionsCollection.remove(comment);
+  return res.send('Deleted comment.');
+});
+
+
+app.post("searchText", (req, res) => {
+  var questions = {$contains:{content: req.body.searchText}};
+  var foundQuestions = questionsCollection.find(questions);
+  //TODO: render w/ found questions
+})
