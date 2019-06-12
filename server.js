@@ -69,7 +69,7 @@ app.post("/postQuestion", (req, res) => {
             author: user,
             content: req.body.content,
             title: req.body.title,
-            date: Date.now(),
+            date: Date(Date.now()).toString(),
             likes: 0,
             comments: []
           }, function (err, result) {
