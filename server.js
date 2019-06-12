@@ -149,17 +149,16 @@ app.post("/login", (req, res) => {
       usersCollection.insertOne(
           {
             username: sentUsername,
+            sessionID: req.sessionID
+          }, function (err, result) {
+            if(err) {
+            } else {
+              res.redirect('/dashboard');
+              console.log('redirected');
+            }
           }
         )
     }
-    console.log(usersCollection.find({username: sentUsername}));
-    usersCollection.updateOne(
-      //Store the session for the user.
-      { username: sentUsername },
-      { $push: { sessionID: req.sessionID }}
-    );
-    
-    res.redirect("/dashboard");
   }
 })
 
@@ -231,7 +230,7 @@ app.get("/dashboard", function (req, res, next) {
   var user = usersCollection.find(
   {
     sessionID: req.sessionID
-  }).username;
+  });
   if(!user) {
     //The user is not logged in with an active sessionID
     res.redirect("/login");
