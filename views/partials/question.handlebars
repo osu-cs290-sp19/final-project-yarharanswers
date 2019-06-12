@@ -3,7 +3,9 @@
         <span class="rock-salt">{{title}}</span>
         <span class="text-muted raleway">-{{author}}</span>
         {{#if mine}}
+        <form action="deleteComment" method="delete"></form>
             <button class="btn btn-danger float-right" action="deleteQuestion" method="delete">Delete Post</button>
+        </form>
         {{/if}}
     </h5>
     <div class="card-body">
