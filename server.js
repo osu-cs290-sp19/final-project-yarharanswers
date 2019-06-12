@@ -63,7 +63,7 @@ app.post("/postQuestion", (req, res) => {
         author: usersCollection.find(
           {
             sessionID: req.sessionID
-          }).username,
+          }).username.toArray()[0],
         content: req.body.content,
         title: req.body.title,
         date: Date.now()
@@ -146,19 +146,21 @@ app.get("likeComment", (req, res) => {
 
 
 app.post("/login", (req, res) => {
-
+  console.log(req.sessionID);
+  const collection = db.collection('users');
   if(!req.body.username) {
     //Bad request
     res.status(400).send();
   } else {
     var sentUsername = req.body.username;
-    user = usersCollection.find(
+    user = collection.find(
       {
         username: sentUsername
       }
-    ).username;
+    ).toArray()[0];
     if(!user) {
-      usersCollection.insertOne(
+      
+      collection.insertOne(
           {
             username: sentUsername,
             sessionID: req.sessionID
@@ -192,7 +194,8 @@ app.post("logout", (req, res) =>
 
 
 app.get("/", (req, res) => {
-  var user = usersCollection.find(
+  const collection = db.collection('users');
+  var user = collection.find(
     {
       sessionID: req.sessionID
     }).username;
@@ -238,22 +241,25 @@ app.get("/login", function (req, res) {
 
 
 app.get("/dashboard", function (req, res, next) {
-  console.log(req.sessionID);
-  var user = usersCollection.find(
-  {
-    sessionID: req.sessionID
-  }).toArray();
-  if(!user) {
-    //The user is not logged in with an active sessionID
-    res.redirect("/login");
-  } else {
-    //Sort in decreasing order of date to begin with. You got 10 here.
-      var questions = questionsCollection.find().sort({date: -1}).limit(10).toArray();
-      //TODO: Render page with questions as data.
-      res.status(200).render('dashboard', {
-        q: questions
+
+  const collection = db.collection('users');
+  var user = collection.findOne({sessionID: req.sessionID}, function(err, result) {
+    if (err) {
+      res.redirect("/login");
+    } else {
+
+      var questions = questionsCollection.find({}, function(err, result) {
+        if(!err) {
+          console.log(result);
+          questions = result.sort({date: -1}).limit(10).toArray();
+          res.status(200).render('dashboard', {
+            q: questions
+          });
+          console.log('done');
+        }
       });
-  }
+    }
+  });
 });
 
 
