@@ -44,7 +44,7 @@ var db = null;
 var usersCollection;
 var questionsCollection;
 
-app.post("postQuestion", (req, res) => {
+app.post("/postQuestion", (req, res) => {
 //Basic post outline
   if(!req.body.content) {
     //Bad request
@@ -55,12 +55,16 @@ app.post("postQuestion", (req, res) => {
         author: usersCollection.find(
           {
             sessionID: req.sessionID
-          }).author,
+          }).username,
         content: req.body.content,
+        title: req.body.title,
         date: Date.now()
       }
     )
-    res.status(200).send();
+    var questions = questionsCollection.find({}).limit(10).toArray();
+    res.status(200).render('dashboard', {
+      q: questions
+    });
   }
 });
 
@@ -230,13 +234,13 @@ app.get("/dashboard", function (req, res, next) {
   var user = usersCollection.find(
   {
     sessionID: req.sessionID
-  });
+  }).toArray();
   if(!user) {
     //The user is not logged in with an active sessionID
     res.redirect("/login");
   } else {
     //Sort in decreasing order of date to begin with. You got 10 here.
-      var questions = questionsCollection.find().sort({date: -1}).limit(10);
+      var questions = questionsCollection.find().sort({date: -1}).limit(10).toArray();
       //TODO: Render page with questions as data.
       res.status(200).render('dashboard', {
         q: questions
