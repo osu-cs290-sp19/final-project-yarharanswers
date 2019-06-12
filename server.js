@@ -12,6 +12,14 @@ export MONGO_USER='cs290_ONID'
 export MONGO_PASSWORD='cs290_ONID'
 export MONGO_DB_NAME='cs290_ONID'
 
+Windows instructions:
+
+$env:MONGO_HOST="classmongo.engr.oregonstate.edu"
+$env:MONGO_USER='cs290_ONID'
+$env:MONGO_PASSWORD='cs290_ONID'
+$env:MONGO_DB_NAME='cs290_ONID'
+where ONID is your lowercase user id
+
 Run:
 npm start
 */
