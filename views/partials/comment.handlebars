@@ -2,6 +2,9 @@
 <div class="card mb-1">
     <h5 class="card-header bg-white rock-salt">
         <span class="text-muted raleway">{{cAuthor}}</span>
+        {{#if mine}}
+            <button class="btn btn-danger float-right"action="deleteComment" method="delete">Delete Post</button>
+        {{/if}}
     </h5>
     <div class="card-body">
         <h5 class="card-title roboto">{{cContent}}</h5>

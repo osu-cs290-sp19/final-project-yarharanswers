@@ -5,9 +5,9 @@
                 <span class="rock-salt">Avast! Login below!</span>
             </h4>
             <div class="card-body">
-                <form action="login" method="post">
+                <form class="needs-validation" action="login" method="post" novalidate>
                     <div class="input-group">
-                        <input type="text" class="form-control" aria-describedby="loginHelp" name='username' placeholder="username...">
+                        <input type="text" class="form-control" aria-describedby="loginHelp" name='username' placeholder="username..." required maxlength="20">
                         <div class="input-group-append">
                             <button type="submit" class="btn btn-info rock-salt">Sail the Seven Seas</button>
                         </div>
