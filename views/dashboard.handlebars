@@ -1,0 +1,47 @@
+<div class="container">
+    <div class="btn-group inline sticky-top py-2">
+        <button type="button" class="btn btn-info dropdown-toggle roboto" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Sort By
+        </button>
+        <div class="dropdown-menu">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+    </div>
+    <div class="btn-group inline float-right sticky-top py-2">
+        <button type="button" class="btn btn-info roboto" data-toggle="modal" data-target="#question-modal">New Question</button>
+    </div>
+    
+    <div class="modal" id="question-modal" tabindex="1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title rock-salt">Yarr matey, what be your inquiry?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <input type="question" class="question-form form-control-lg" aria-describedby="questionHelp" placeholder="Question">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">Ask</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--These will be dynamically added w/ handlebars-->
+    <div class="container mt-5">
+        {{#each q}}
+            {{> question}}
+        {{/each}}
+    </div>
+</div>
