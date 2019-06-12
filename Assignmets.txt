@@ -1,0 +1,55 @@
+JO:
+
+    Short Term:
+    - Setup server almost all the way (minus database)
+    - write usage information
+    - how it fits into system overall
+    - keep list of problems/questions that come up (post on github as issues)
+    - Non-search GET requests
+    - Update package.json
+
+    Long Term:
+    - Setup server
+    - MongoDB
+    - API for MongoDB
+    - Specific GET/POST requests
+    - Search for content
+    - Display by authors
+
+REMI:
+
+    Short Term:
+    - make basic HTML/CSS layout 
+    - keep list of problems/questions that come up (post on github as issues)
+
+    Long Term:
+    - Consistent site stylesheets
+    - Write basic HTML
+    - Convert into .handlebars templates
+    - Animations JavaScript (animations.js)
+
+EM:
+
+    Short Term:
+    - Write POST requests (login info/search queries/author)
+    - Data template for database
+    - keep list of problems/questions that come up (post on github as issues)
+
+    Long Term:
+    - Write client-side interaction behavior
+    - Help Josie with MongoDB API
+    - Write the Create New Post javascript interactions
+    - Parse and interpret server data
+    - Sort by parameters
+
+
+REQUIRED FEATURES:
+ - Login (on session start, no password, store session ID to track user)
+ - Post question/comment
+ - rate comment as selected by questioner
+ - sort by various parameters (date, rating (ahoy/views), number of comments)
+ - Ahoy! questions
+ - Search for text content in questions/content
+ - Display by author (If I click an author, only their posts are shown)
+ - Logout during session (logout DESTROYS AND OBLITERATES the session)
+ - if not logged out, don't display home

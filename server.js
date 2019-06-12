@@ -4,6 +4,20 @@ var bodyParser = require('body-parser');
 var session = require('express-session')
 var MongoClient = require('mongodb').MongoClient;
 
+/*
+Setup:
+
+export MONGO_HOST="classmongo.engr.oregonstate.edu"
+export MONGO_USER='cs290_ONID'
+export MONGO_PASSWORD='cs290_ONID'
+export MONGO_DB_NAME='cs290_ONID'
+
+Run:
+npm start
+*/
+
+//TODO: Question: How are we tracking the id's to view, like, update, etc. and also to delete?
+
 const mongoHost = process.env.MONGO_HOST;
 const mongoPort = process.env.MONGO_PORT || 27017;
 const mongoUser = process.env.MONGO_USER;
@@ -11,9 +25,7 @@ const mongoPassword = process.env.MONGO_PASSWORD;
 const mongoDBName = process.env.MONGO_DB_NAME;
 
 var app = express();
-
 var port = process.env.PORT || 3000;
-
 var mongoUrl = `mongodb://${mongoUser}:${mongoPassword}@${mongoHost}:${mongoPort}/${mongoDBName}`;
 var db = null;
 var usersCollection;
@@ -29,11 +41,12 @@ app.use(express.static('public'));
 app.use(session( {
     'secret': 'YarHar314159265843'
 }
-))
+));
 
-app.post(/PostQuestion/, (req, res) => {
+
+app.post("postQuestion", (req, res) => {
 //Basic post outline
-  if(!req.body.question || !req.body.question.questionText) {
+  if(!req.body.content) {
     //Bad request
     res.status(400).send();
   } else {
@@ -42,32 +55,37 @@ app.post(/PostQuestion/, (req, res) => {
         author: usersCollection.find(
           {
             sessionID: req.sessionID
-          }).username,
-        questionText: req.body.question.questionText
+          }).author,
+        content: req.body.content,
+        date: Date.now()
       }
     )
     res.status(200).send();
   }
 });
 
-app.post(/PostComment/, (req, res) => {
-  if(!req.body.question || !req.body.comment || !req.body.comment.text) {
+
+app.post("postComment", (req, res) => {
+  if(!req.body._id || !req.body.content) {
     //Bad request
     res.status(400).send();
   } else {
     questionsCollection.updateOne(
-      {_id: req.body.question._id},
+      {_id: req.body._id},
       {
-        $set: 
+        $push: 
         { 
-          comment: 
-          {
-            author: usersCollection.find(
-              {
-                sessionID: req.sessionID
-              }).username,
-            text: req.body.question.comment.text
+          comments: {
+            comment:
+            {
+              author: usersCollection.find(
+                {
+                  sessionID: req.sessionID
+                }).username,
+              text: req.body.content
+            }
           }
+          
         }
       }
     )
@@ -75,12 +93,52 @@ app.post(/PostComment/, (req, res) => {
   }
 })
 
+
+app.get("viewQuestion", (req, res) => {
+  var question = {_id: req.body._id};
+  questionsCollection.updateOne(
+    question,
+    {
+      $inc: {
+        views: 1
+      }
+    }
+  )
+})
+
+
+app.get("likeQuestion", (req, res) => {
+  var question = {_id: req.body._id};
+  questionsCollection.updateOne(
+    question,
+    {
+      $inc: {
+        likes: 1
+      }
+    }
+  )
+})
+
+
+app.get("likeComment", (req, res) => {
+  var comment = {'question.comments.comment._id': req.body._id};
+  questionsCollection.updateOne(
+    comment,
+    {
+      $inc: {
+        likes: 1
+      }
+    }
+  )
+})
+
+
 app.post("login", (req, res) => {
-  if(!req.body.user || !req.body.user.username) {
+  if(!req.body.username) {
     //Bad request
     res.status(400).send();
   } else {
-    var sentUsername = req.params.userName;
+    var sentUsername = req.body.username;
     user = usersCollection.find(
       {
         username: sentUsername
@@ -103,9 +161,10 @@ app.post("login", (req, res) => {
   }
 })
 
-app.post(/logout/, (req, res) =>
+
+app.post("logout", (req, res) =>
 {
-  if(!req.body.user || !req.body.user.username) {
+  if(!req.body.username) {
     //Bad request
     res.status(400).send();
   } else {
@@ -114,28 +173,55 @@ app.post(/logout/, (req, res) =>
       { username: sentUsername },
       { $push: { sessionID: ""}}
     );
-    
     res.redirect("/login");
   }
 })
 
 
 app.get("/", (req, res) => {
-  if(!req.sessionID) {
+  var user = usersCollection.find(
+    {
+      sessionID: req.sessionID
+    }).username;
+    if(!user) {
+      //The user is not logged in with an active sessionID
+      res.redirect("/login");
+    }
+  if(!user) {
     res.redirect('/login')
   } else {
     res.redirect('/dashboard')
   }
 })
 
-app.delete(/DeleteQuestion/, (req, res) => {
-  req.params.questionNumber;
-  return res.send('Received a DELETE HTTP method to delete a specific question num.');
+
+app.post("searchText", (req, res) => {
+  //Will return the first 10 questions that have *question text content* matching the search string
+  var questions = {$contains:{content: req.body.searchText}};
+  var foundQuestions = questionsCollection.find(questions).limit(10);
+  //TODO: render w/ found questions
+})
+
+
+app.delete("deleteQuestion", (req, res) => {
+
+  var question = {_id: req.body._id}
+  questionsCollection.remove(question);
+  return res.send('Deleted question.');
 });
 
-app.get(/\/login/, function (req, res) {
+app.delete("deleteComment", (req, res) => {
+
+  var comment = {'question.comments.commend_id': req.body._id}
+  questionsCollection.remove(comment);
+  return res.send('Deleted comment.');
+});
+
+
+app.get("/login", function (req, res) {
   res.status(200).send("login page");
 });
+
 
 app.get("/dashboard", function (req, res, next) {
   console.log(req.sessionID);
@@ -147,14 +233,19 @@ app.get("/dashboard", function (req, res, next) {
     //The user is not logged in with an active sessionID
     res.redirect("/login");
   } else {
+    //Sort in decreasing order of date to begin with. You got 10 here.
+      var questions = questionsCollection.find().sort({date: -1}).limit(10);
+      //TODO: Render page with questions as data.
       res.status(200).send('DASHBOARD YEAH');
   }
 });
+
 
 app.get('*', function (req, res, next) {
   console.log(`---- The requested url \"${req.url}\" was not found`);
   res.status(404).send('404 Not Found');
 });
+
 
 MongoClient.connect(mongoUrl, function (err, client) {
   if (err) {
@@ -175,5 +266,4 @@ MongoClient.connect(mongoUrl, function (err, client) {
   app.listen(port, function (err) {  
     console.log(`-- Server listening on port ${port}`);
   });
-
 });
