@@ -201,9 +201,10 @@ app.post("/login", (req, res) => {
 
 app.get("/logout", (req, res) =>
 {
+  console.log('called')
     db.collection('users').updateOne(
       { sessionID: req.sessionID },
-      { $push: { sessionID: ""}},
+      { $set: { sessionID: ""}},
       function(err, result) {
         if(!err) {
           res.redirect("/login");
@@ -225,15 +226,14 @@ app.post("searchText", (req, res) => {
 })
 
 
-app.get("deleteQuestion/:id", (req, res) => {
+app.get("/deleteQuestion/:id", (req, res) => {
+  console.log(req.params.id);
 
-  var id = req.url.replace(/^[\/deleteQuestion\/]+/, '');
-  console.log(id);
-  var question = {_id: id}
+  var question = {"_id": ObjectId(req.params.id)}
   questionsCollection.remove(question, function(err, result) {
     if(!err) {
    //   res.redirect('dash')
-      return res.status(200).send();
+      res.redirect("/dashboard");
     }
   });
 });
