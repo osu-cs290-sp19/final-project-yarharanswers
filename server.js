@@ -89,15 +89,21 @@ app.post("/postComment", (req, res) => {
     res.status(400).send();
   } else {
     
-    var myquery = {"_id": ObjectId(req.body._id)};
-    var newvalues = { $push: { comments: { author: 'Unknown', content: req.body.content } } };
-    console.log(req.body._id);
-    db.collection('questions').updateOne(myquery, newvalues, function(err, result) {
-      if (!err) {
-         console.log("1 document updated");
-        res.redirect("/dashboard");
+
+    db.collection('users').findOne({sessionID: req.sessionID}, function (err, result) {
+      if(!err) {
+        user = result.username;
+        var myquery = {"_id": ObjectId(req.body._id)};
+        var newvalues = { $push: { comments: { author: user, content: req.body.content } } };
+        db.collection('questions').updateOne(myquery, newvalues, function(err, result) {
+          if (!err) {
+            console.log("1 document updated");
+            res.redirect("/dashboard");
+          }
+        });
       }
     });
+   
   /*  questionsCollection.updateOne(
      
       {_id: req.body._id},
