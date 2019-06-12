@@ -44,9 +44,10 @@ a:any-link {
     float: right;
 }
 
-.the-top-part {
+.nav {
     padding: 0px;
-    margin-top: 0px;
+    margin-top: -20px;
+    color: #10153e;
 }
 
 .sort-by {
@@ -55,9 +56,13 @@ a:any-link {
 }
 
 .new-post-link {
-    display: inline-block;
+    /*display: inline-block;
+    */
+    margin-top: 20px;
     float: right;
     font-size: 20px;
+    color: #10153e;
+    font-weight: bold;
 }
 
 .answer {
