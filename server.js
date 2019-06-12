@@ -247,7 +247,7 @@ app.get("/dashboard", function (req, res, next) {
 
 app.get('*', function (req, res, next) {
   console.log(`---- The requested url \"${req.url}\" was not found`);
-  res.status(404).send('404 Not Found');
+  res.status(404).render('404');
 });
 
 
