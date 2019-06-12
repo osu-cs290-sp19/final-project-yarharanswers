@@ -178,7 +178,7 @@ app.post("/login", (req, res) => {
 })
 
 
-app.post("logout", (req, res) =>
+app.post("/logout", (req, res) =>
 {
   if(!req.body.username) {
     //Bad request
@@ -187,28 +187,20 @@ app.post("logout", (req, res) =>
     //Clear user session and return to login page
     usersCollection.updateOne(
       { username: sentUsername },
-      { $push: { sessionID: ""}}
+      { $push: { sessionID: ""}},
+      function(err, result) {
+        if(!err) {
+          res.redirect("/login");
+        }
+      }
     );
-    res.redirect("/login");
+ //   res.redirect("/login");
   }
 })
 
 
 app.get("/", (req, res) => {
-  const collection = db.collection('users');
-  var user = collection.find(
-    {
-      sessionID: req.sessionID
-    }).username;
-    if(!user) {
-      //The user is not logged in with an active sessionID
-      res.redirect("/login");
-    }
-  if(!user) {
-    res.redirect('/login')
-  } else {
     res.redirect('/dashboard')
-  }
 })
 
 
@@ -237,6 +229,7 @@ app.delete("deleteComment", (req, res) => {
 
 app.get("/login", function (req, res) {
   res.status(200).render('login', {
+    loggedIn: false
   });
 });
 
@@ -252,8 +245,8 @@ app.get("/dashboard", function (req, res, next) {
       var questions = db.collection('questions').find({}, function(err, result) {
         if(!err) {
           console.log(result.toArray());
-          //questions = result;//.sort({date: -1}).limit(10).toArray();
           res.status(200).render('dashboard', {
+            loggedIn: true,
             q: result.sort({date: -1}).limit(10).toArray()
           });
           console.log(`--------------- ${result.sort({date: -1}).limit(10).toArray()}`);
