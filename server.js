@@ -25,24 +25,20 @@ const mongoPassword = process.env.MONGO_PASSWORD;
 const mongoDBName = process.env.MONGO_DB_NAME;
 
 var app = express();
-var port = process.env.PORT || 3000;
-var mongoUrl = `mongodb://${mongoUser}:${mongoPassword}@${mongoHost}:${mongoPort}/${mongoDBName}`;
-var db = null;
-var usersCollection;
-var questionsCollection;
-
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
-
 app.use(bodyParser.json());
-
 app.use(express.static('public'));
-
 app.use(session( {
     'secret': 'YarHar314159265843'
 }
 ));
 
+var port = process.env.PORT || 3000;
+var mongoUrl = `mongodb://${mongoUser}:${mongoPassword}@${mongoHost}:${mongoPort}/${mongoDBName}`;
+var db = null;
+var usersCollection;
+var questionsCollection;
 
 app.post("postQuestion", (req, res) => {
 //Basic post outline
@@ -133,11 +129,14 @@ app.get("likeComment", (req, res) => {
 })
 
 
-app.post("login", (req, res) => {
+app.post("/login", (req, res) => {
+  //console.log(req);
+  console.log(req.body.username);
   if(!req.body.username) {
     //Bad request
     res.status(400).send();
   } else {
+    console.log('in here');
     var sentUsername = req.body.username;
     user = usersCollection.find(
       {
@@ -219,7 +218,8 @@ app.delete("deleteComment", (req, res) => {
 
 
 app.get("/login", function (req, res) {
-  res.status(200).send("login page");
+  res.status(200).render('login', {
+  });
 });
 
 
@@ -236,7 +236,9 @@ app.get("/dashboard", function (req, res, next) {
     //Sort in decreasing order of date to begin with. You got 10 here.
       var questions = questionsCollection.find().sort({date: -1}).limit(10);
       //TODO: Render page with questions as data.
-      res.status(200).send('DASHBOARD YEAH');
+      res.status(200).render('login', {
+        q: questions
+      });
   }
 });
 

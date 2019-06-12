@@ -5,11 +5,11 @@
                 <span class="rock-salt">Avast! Login below!</span>
             </h4>
             <div class="card-body">
-                <form>
-                    <div class="form-group" style="margin: 0 auto;">
-                        <input type="login" class="login-form" aria-describedby="loginHelp" placeholder="Username">
-                    </div>
-                    <button type="submit" class="btn btn-info float-right">Submit</button>
+                <form action="login" method="post">
+                   <!-- <div class="form-group" style="margin: 0 auto;">-->
+                        <input type="text" class="login-form" aria-describedby="loginHelp" name='username' value="Username">
+                  <!--  </div>-->
+                    <button type="submit" value="Submit" class="btn btn-info float-right">Submit</button>
                 </form>
             </div>
         </div>
