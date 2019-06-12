@@ -21,13 +21,13 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="postQuestion" method="post">
+                <form class="needs-validation" action="postQuestion" method="post" novalidate>
                     <div class="modal-body">
-                            <div class="form-group">
-                                <input type="text" class="form-control" id="title" placeholder="title...">
-                                <hr \>
-                                <textarea class="form-control" aria-describedby="questionHelp" placeholder="question..."></textarea>
-                            </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="title" placeholder="title..." required maxlength="50">
+                            <hr \>
+                            <textarea class="form-control" aria-describedby="questionHelp" id="question" placeholder="question..." required></textarea>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">Ask</button>
