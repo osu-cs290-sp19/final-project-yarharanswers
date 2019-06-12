@@ -3,10 +3,10 @@
         <span class="rock-salt">{{title}}</span>
         <span class="text-muted raleway">-{{author}}</span>
 
-        <form action="deleteComment" method="delete"></form>
-            <span name="_id" style='display: none'>{{_id}}</span>
-            <button class="btn btn-danger float-right" action="deleteQuestion" method="delete">Delete Post</button>
-        </form>
+        <a data-confirm="Are you sure?" data-method="delete" href="/deleteQuestion/{{_id}}" rel="nofollow">
+            <button class="btn btn-danger float-right">Delete Post</button>
+        </a>
+        
     </h5>
     <div class="card-body">
         <h5 class="card-title roboto">{{content}}</h5>
@@ -17,12 +17,14 @@
         <a href="#" class="btn btn-info">Toggle Comments</a>
     </div>
     <div class="card-footer bg-white text-muted">
-        <div class="input-group">
-            <textarea class="form-control" placeholder="Comment..." aria-label="Comment Submission"></textarea>
-            <div class="input-group-append">
-                <button class="btn btn-info" type="submit">Post comment</button>
+        <form action="postComment" method="post">
+            <div class="input-group" >
+                <textarea class="form-control" placeholder="Comment..." aria-label="Comment Submission"></textarea>
+                <div class="input-group-append">
+                    <button class="btn btn-info" type="submit">Post comment</button>
+                </div>
             </div>
-        </div>
+        </form>
     </div>
     <div class="card-footer">
         {{#each qComments}}
