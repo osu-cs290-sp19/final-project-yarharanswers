@@ -27,7 +27,11 @@ const mongoDBName = process.env.MONGO_DB_NAME;
 var app = express();
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
+
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded( {
+  extended: true
+}));
 app.use(express.static('public'));
 app.use(session( {
     'secret': 'YarHar314159265843'
@@ -130,13 +134,11 @@ app.get("likeComment", (req, res) => {
 
 
 app.post("/login", (req, res) => {
-  //console.log(req);
-  console.log(req.body.username);
+
   if(!req.body.username) {
     //Bad request
     res.status(400).send();
   } else {
-    console.log('in here');
     var sentUsername = req.body.username;
     user = usersCollection.find(
       {
@@ -150,6 +152,7 @@ app.post("/login", (req, res) => {
           }
         )
     }
+    console.log(usersCollection.find({username: sentUsername}));
     usersCollection.updateOne(
       //Store the session for the user.
       { username: sentUsername },
@@ -236,7 +239,7 @@ app.get("/dashboard", function (req, res, next) {
     //Sort in decreasing order of date to begin with. You got 10 here.
       var questions = questionsCollection.find().sort({date: -1}).limit(10);
       //TODO: Render page with questions as data.
-      res.status(200).render('login', {
+      res.status(200).render('dashboard', {
         q: questions
       });
   }
