@@ -12,8 +12,7 @@
     <div class="btn-group inline float-right sticky-top py-2">
         <button type="button" class="btn btn-info roboto" data-toggle="modal" data-target="#question-modal">New Question</button>
     </div>
-    
-    <div class="modal" id="question-modal" tabindex="1" role="dialog">
+    <div class="modal fade" id="question-modal" tabindex="1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -25,9 +24,10 @@
                 <div class="modal-body">
                     <form>
                         <div class="form-group">
-                            <input type="question" class="question-form form-control-lg" aria-describedby="questionHelp" placeholder="Question">
+                            <input type="text" class="form-control" id="title" placeholder="title...">
+                            <hr \>
+                            <textarea class="form-control" aria-describedby="questionHelp" placeholder="question..."></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
                 <div class="modal-footer">
