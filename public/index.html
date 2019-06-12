@@ -13,15 +13,18 @@
 
     <body>
         <header>
-            <a href="#" class="title"><h1 class="title-yarhar">YarHar!</h1><h3 class="title-answers">Answers</h3></a>
-            <input type="text" id="header-search-bar" placeholder="Search...">
-        </header>
-
-        <main class="answers">
+            <div class="title-and-search">
+                    <a href="#" class="title"><h1 class="title-yarhar">YarHar!</h1>
+                    <h3 class="title-answers">Answers</h3></a>
+                    <input type="text" id="header-search-bar" placeholder="Search...">
+            </div>
             <div class="nav">
                 <h4 class="sort-by">Sort...</h4>
                 <a href="#" class="new-post-link">Ask a Question</a>
             </div>
+        </header>
+
+        <main class="answers">
             <!--These will be dynamically added w/ handlebars-->
             <article class="answer">
                 <p class="author">author</p>

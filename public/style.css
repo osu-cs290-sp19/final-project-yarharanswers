@@ -5,7 +5,7 @@ body {
     padding: 0px;
 }
 
-header {
+.title-and-search {
     background-color: white;
     background: white;
     background-clip: content-box;
@@ -45,7 +45,7 @@ a:any-link {
 }
 
 .nav {
-    padding: 0px;
+    padding: 5px;
     margin-top: -20px;
     color: #10153e;
 }
@@ -56,8 +56,6 @@ a:any-link {
 }
 
 .new-post-link {
-    /*display: inline-block;
-    */
     margin-top: 20px;
     float: right;
     font-size: 20px;
