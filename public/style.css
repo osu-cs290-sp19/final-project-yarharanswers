@@ -8,9 +8,6 @@ body {
 header {
     background-color: white;
     background: white;
-    /*margin-left: -100px;
-    margin-right: -100px;
-    overflow-x: hidden;*/
     background-clip: content-box;
     padding: 0px;
     border: 0px;
