@@ -178,15 +178,15 @@ app.post("/login", (req, res) => {
 })
 
 
-app.post("/logout", (req, res) =>
+app.get("/logout", (req, res) =>
 {
-  if(!req.body.username) {
+  //if(!req.body.username) {
     //Bad request
-    res.status(400).send();
-  } else {
+  //  res.status(400).send();
+  //} else {
     //Clear user session and return to login page
     usersCollection.updateOne(
-      { username: sentUsername },
+      { sessionID: req.sessionID },
       { $push: { sessionID: ""}},
       function(err, result) {
         if(!err) {
@@ -195,7 +195,7 @@ app.post("/logout", (req, res) =>
       }
     );
  //   res.redirect("/login");
-  }
+ // }
 })
 
 
