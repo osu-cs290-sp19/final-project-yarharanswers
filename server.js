@@ -58,19 +58,25 @@ app.post("/postQuestion", (req, res) => {
     //Bad request
     res.status(400).send();
   } else {
-
-    db.collection('questions').insertOne(
-      {
-        author: 'filler',//TODO: Replace
-        content: req.body.content,
-        title: req.body.title,
-        date: Date.now()
-      }, function (err, result) {
-        if(!err) {
-          res.redirect("/dashboard")
-        }
+    var user = 'Unknown User';
+    db.collection('users').findOne({sessionID: req.sessionID}, function (err, result) {
+      if(!err) {
+        console.log(result.username);
+        user = result.username;
+        db.collection('questions').insertOne(
+          {
+            author: user,//TODO: Replace
+            content: req.body.content,
+            title: req.body.title,
+            date: Date.now()
+          }, function (err, result) {
+            if(!err) {
+              res.redirect("/dashboard")
+            }
+          }
+        );
       }
-    )
+    })   
   }
 });
 
@@ -180,7 +186,7 @@ app.post("/login", (req, res) => {
 
 app.get("/logout", (req, res) =>
 {
-    usersCollection.updateOne(
+    db.collection('users').updateOne(
       { sessionID: req.sessionID },
       { $push: { sessionID: ""}},
       function(err, result) {
@@ -204,11 +210,14 @@ app.post("searchText", (req, res) => {
 })
 
 
-app.delete("deleteQuestion", (req, res) => {
+app.delete("/deleteQuestion", (req, res) => {
 
   var question = {_id: req.body._id}
-  questionsCollection.remove(question);
-  return res.send('Deleted question.');
+  questionsCollection.remove(question, function(err, result) {
+    if(!err) {
+      return res.send('Deleted question.');
+    }
+  });
 });
 
 app.delete("deleteComment", (req, res) => {
@@ -230,15 +239,17 @@ app.get("/dashboard", function (req, res, next) {
 
   const collection = db.collection('users');
   var user = collection.findOne({sessionID: req.sessionID}, function(err, result) {
-    if (err) {
+    if (err || result == null || result.username == null) {
       res.redirect("/login");
     } else {
-
+      var currentAuthor = result.username;
+      console.log(currentAuthor);
       var questions = db.collection('questions').find({}).toArray(function(err, result) {
         if (err) throw err;
         res.status(200).render('dashboard', {
           loggedIn: true,
-          q: result
+          q: result,
+          currentAuthor
         });
       });
     }
